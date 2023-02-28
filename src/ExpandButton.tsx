@@ -3,7 +3,12 @@ import { DownOutlined } from '@ant-design/icons';
 import classNames from 'classnames';
 import './ExpandButton.css';
 
-const ExpandButton = ({ isExpanded, ...restProps }: any) => {
+type PropsType = Omit<
+  React.HTMLProps<HTMLButtonElement> & { isExpanded: boolean; },
+  'type'
+>
+
+const ExpandButton = ({ isExpanded, ...restProps }: PropsType) => {
   return (
     <button className={classNames('expand-button', { 'expand-button__expanded': isExpanded })} {...restProps}>
       <DownOutlined />

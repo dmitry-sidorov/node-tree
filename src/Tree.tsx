@@ -8,7 +8,7 @@ const Tree = (props: any) => {
 
   return (
     <div className='tree'>
-      <h3>Root:</h3>
+      <h3>Tree is here:</h3>
       <TreeNode {...mockData} />
     </div>
   );

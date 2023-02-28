@@ -23,6 +23,9 @@
 }
 
 .tree-node__selected {
-  /* border: 1px solid rebeccapurple; */
-  background-color: aqua;
+  background-color: #eeeff8;
+}
+
+.tree-node_children {
+  transform: translateX(10px);
 }
