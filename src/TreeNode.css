@@ -1,3 +1,28 @@
+.tree-node {
+  display: flex;
+  flex-direction: column;
+}
+
+.tree-node_row {
+  padding: 5px;
+  display: flex;
+}
+
+.tree-node_title {
+  background: none;
+	color: inherit;
+	border: none;
+	padding: 0;
+	font: inherit;
+	cursor: auto;
+	outline: inherit;
+}
+
+.tree-node__expanded {
+  transform: translateX(10px);
+}
+
 .tree-node__selected {
+  /* border: 1px solid rebeccapurple; */
   background-color: aqua;
 }
