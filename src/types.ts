@@ -1,7 +1,7 @@
 export type Tree = {
   id: number;
-  name: string,
-  children: Tree[]
+  name: string;
+  children: Tree[];
 }
 
 export type CreateNodeParams = {
