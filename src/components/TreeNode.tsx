@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import classNames from 'classnames';
 import { useAppDispatch, useAppSelector } from '../store';
-import { selectSelectedNodeId, setSelectedNodeId } from '../store/slices';
+import { selectSelectedNodeId, setModalParams, setSelectedNodeId } from '../store/slices';
 import { Tree } from '../types';
 import './TreeNode.css';
 import { ActionButton, ExpandButton } from '.';
@@ -20,8 +20,8 @@ const TreeNode = ({ id, name, children }: Tree) => {
     dispatch(setSelectedNodeId(id));
   }
 
-  const onActionButtonClick = (variant: Actions) => {
-
+  const onActionButtonClick = (mode: Actions) => {
+    dispatch(setModalParams({ isOpened: true, mode, nodeId: id, nodeName: name }));
   }
 
   const renderActionButtons = () => {

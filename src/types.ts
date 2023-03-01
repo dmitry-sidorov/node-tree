@@ -26,5 +26,5 @@ export type ModalParams = {
   mode?: Actions;
   treeName?: string;
   nodeId?: number;
-  nodeName?: number;
+  nodeName?: string;
 }

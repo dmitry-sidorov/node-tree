@@ -14,21 +14,21 @@ export const fetchRootTree = createAsyncThunk(
 export const addTreeNode = createAsyncThunk(
 	'addTreeNode',
 	async (payload: CreateNodeParams) => {
-		return await TreeApi.createTreeNode(payload);
+		return await TreeApi.createTreeNode(payload).then(result => result?.data);;
 	},
 );
 
 export const editTreeNode = createAsyncThunk(
 	'editTreeNode',
 	async (payload: RenameNodeParams) => {
-		return await TreeApi.renameTreeNode(payload);
+		return await TreeApi.renameTreeNode(payload).then(result => result?.data);;
 	},
 );
 
 export const deleteTreeNode = createAsyncThunk(
 	'deleteTreeNode',
 	async (payload: DeleteNodeParams) => {
-		return await TreeApi.deleteTreeNode(payload);
+		return await TreeApi.deleteTreeNode(payload).then(result => result?.data);;
 	},
 );
 
