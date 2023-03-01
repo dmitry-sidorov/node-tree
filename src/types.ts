@@ -8,23 +8,26 @@ export type Tree = {
 
 export type CreateNodeParams = {
   treeName: string;
-  parentNodeId: string;
+  parentNodeId: number;
   nodeName: string;
 }
 
 export type DeleteNodeParams = {
   treeName: string;
-  nodeId: string;
+  nodeId: number;
 }
 
 export type RenameNodeParams = DeleteNodeParams & {
   newNodeName: string;
 }
 
-export type ModalParams = {
-  isOpened: boolean;
-  mode?: Actions;
-  treeName?: string;
+export type ModalNodePayload = {
   nodeId?: number;
   nodeName?: string;
+  parentNodeId?: number;
+}
+
+export type ModalParams = ModalNodePayload & {
+  isOpened: boolean;
+  mode?: Actions;
 }

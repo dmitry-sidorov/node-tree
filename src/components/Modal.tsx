@@ -2,17 +2,18 @@ import { Modal as AntdModal, Form, Divider } from 'antd';
 import { Actions, TREE_GUID } from '../contants';
 import { useAppDispatch, useAppSelector } from '../store';
 import { selectModalParams, selectIsLoading, setModalParams } from '../store/slices';
+import { addTreeNode, deleteTreeNode, editTreeNode, fetchRootTree, updateAndFetch } from '../store/thunks';
 import './Modal.css';
 import ModalForm from './ModalForm';
 
 const Modal = () => {
   const dispatch = useAppDispatch();
-  const { isOpened, mode, nodeName } = useAppSelector(selectModalParams);
+  const { isOpened, mode, nodeName, parentNodeId, nodeId } = useAppSelector(selectModalParams);
   const isLoading = useAppSelector(selectIsLoading);
   const [form] = Form.useForm();
   const shownNodeName = nodeName === TREE_GUID ? 'Root' : nodeName;
 
-  const handleCancel = () => {
+  const onModalClose = () => {
     dispatch(setModalParams({ isOpened: false }))
   };
 
@@ -27,13 +28,19 @@ const Modal = () => {
     }
   }
 
-  const onFinish = ({ updatedTreeNode }: any) => {
-    const data = {
-      treeNode: nodeName,
-      nodeName: updatedTreeNode,
-      // nodeId: i
-    };
-    console.log('on finsh data: ', data);
+  const callDispatch = (callback: Function) => {
+    dispatch(callback()).then(() => dispatch(fetchRootTree()));
+  }
+
+  const onFormFinish = ({ name }: any) => {
+    if (mode === Actions.add && parentNodeId) {
+      callDispatch(() => addTreeNode({ treeName: TREE_GUID, parentNodeId, nodeName: name }));
+    }
+
+    if (mode === Actions.edit && nodeId) {
+      callDispatch(() => editTreeNode({ treeName: TREE_GUID, nodeId, newNodeName: name }));
+      // dispatch(updateAndFetch({ treeName: TREE_GUID, nodeId, newNodeName: name }));
+    }
   }
 
   const getActionText = (): string => {
@@ -49,14 +56,32 @@ const Modal = () => {
     }
   }
 
+  const onModalOk = () => {
+    switch(mode) {
+      case Actions.add:
+      case Actions.edit:
+        form.submit();
+        break;
+      case Actions.delete:
+        nodeId && callDispatch(() => deleteTreeNode({ treeName: TREE_GUID, nodeId }));
+        break;
+    }
+
+    // setTimeout(() => {
+      
+      onModalClose();
+      // dispatch(fetchRootTree());
+    // });
+  }
+
   return (
     <AntdModal
       destroyOnClose
       title={getActionText()}
       open={isOpened}
-      onOk={() => form.submit()}
+      onOk={onModalOk}
       confirmLoading={isLoading}
-      onCancel={handleCancel}
+      onCancel={onModalClose}
       okButtonProps={{ danger: mode === Actions.delete }}
       okType={mode === Actions.delete ? 'default' : 'primary'}
       okText={getActionText().toUpperCase()}
@@ -70,7 +95,7 @@ const Modal = () => {
                 formInstance={form}
                 placeholder={getPlaceholder()}
                 label={mode === Actions.edit ? 'New Node Name' : ''}
-                onFinish={onFinish}
+                onFinish={onFormFinish}
               />
           }
           <Divider />

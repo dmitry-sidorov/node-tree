@@ -2,12 +2,12 @@ import React, { useState, forwardRef } from 'react';
 import classNames from 'classnames';
 import { useAppDispatch, useAppSelector } from '../store';
 import { selectSelectedNodeId, setModalParams, setSelectedNodeId } from '../store/slices';
-import { Tree } from '../types';
+import { ModalNodePayload, Tree } from '../types';
 import './TreeNode.css';
 import { ActionButton, ExpandButton } from '.';
 import { Actions, TREE_GUID } from '../contants';
 
-const TreeNode = ({ id, name, children }: Tree) => {
+const TreeNode = ({ id, name, children }: Tree = { id: 1, name: 'default', children: [] }) => {
   const [showChildren, setShowChildren] = useState<boolean>(false);
   const selectedNodeId = useAppSelector(selectSelectedNodeId);
   const dispatch = useAppDispatch();
@@ -20,8 +20,19 @@ const TreeNode = ({ id, name, children }: Tree) => {
     dispatch(setSelectedNodeId(id));
   }
 
+  const getNodePayload = (mode: Actions): ModalNodePayload => {
+    switch (mode) {
+      case Actions.add:
+        return { parentNodeId: id }
+      case Actions.edit:
+        return { nodeId: id, nodeName: name }
+      case Actions.delete:
+        return { nodeId: id, nodeName: name }
+    }
+  }
+
   const onActionButtonClick = (mode: Actions) => {
-    dispatch(setModalParams({ isOpened: true, mode, nodeId: id, nodeName: name }));
+    dispatch(setModalParams({ isOpened: true, mode, ...getNodePayload(mode) }));
   }
 
   const renderActionButtons = () => {

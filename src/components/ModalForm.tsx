@@ -2,7 +2,7 @@ import { Form, Input, FormInstance } from 'antd';
 import { useState } from 'react';
 import './ModalForm.css';
 
-const FORM_NAME = 'treeNode';
+const FORM_NAME = 'name';
 
 type PropsType = {
   label?: string;
