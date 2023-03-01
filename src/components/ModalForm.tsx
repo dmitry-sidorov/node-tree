@@ -16,7 +16,6 @@ const ModalForm = ({ label, placeholder, onFinish, formInstance, onPressEnter }:
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleErrors = (value: any) => {
-    console.log('handleErrors: ', value);
     const [errorMessage] = formInstance.getFieldError(FORM_NAME);
 
     setErrorMessage(errorMessage);

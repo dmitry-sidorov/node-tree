@@ -3,7 +3,6 @@ import { Actions, TREE_GUID } from '../contants';
 import { useAppDispatch, useAppSelector } from '../store';
 import { selectModalParams, selectIsLoading, setModalParams } from '../store/slices';
 import { addTreeNode, deleteTreeNode, editTreeNode, fetchRootTree } from '../store/thunks';
-import './Modal.css';
 import ModalForm from './ModalForm';
 
 const Modal = () => {

@@ -44,7 +44,6 @@ const TreeNode = ({ id, name, children }: Tree = { id: 1, name: 'default', child
       case Actions.add:
         return { parentNodeId: id }
       case Actions.edit:
-        return { nodeId: id, nodeName: name }
       case Actions.delete:
         return { nodeId: id, nodeName: name }
     }

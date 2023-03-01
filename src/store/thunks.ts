@@ -21,7 +21,6 @@ export const addTreeNode = createAsyncThunk(
 	'addTreeNode',
 	async (payload: CreateNodeParams) => {
 		return await TreeApi.createTreeNode(payload)
-			.then(result => result?.data);
 	},
 );
 
@@ -35,7 +34,7 @@ export const editTreeNode = createAsyncThunk(
 export const deleteTreeNode = createAsyncThunk(
 	'deleteTreeNode',
 	async (payload: DeleteNodeParams) => {
-		return await TreeApi.deleteTreeNode(payload).then(result => result?.data);
+		return await TreeApi.deleteTreeNode(payload);
 	},
 );
 
