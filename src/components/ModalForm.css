@@ -1,0 +1,8 @@
+.modal-form_label {
+	font-size: 12px;
+}
+
+.modal-form_error {
+	font-size: 12px;
+	color: red;
+}

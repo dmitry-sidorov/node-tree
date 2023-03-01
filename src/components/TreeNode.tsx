@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, forwardRef } from 'react';
 import classNames from 'classnames';
 import { useAppDispatch, useAppSelector } from '../store';
 import { selectSelectedNodeId, setModalParams, setSelectedNodeId } from '../store/slices';
@@ -16,7 +16,7 @@ const TreeNode = ({ id, name, children }: Tree) => {
   const isRoot = name === TREE_GUID;
 
   const onExpandClick = () => {
-    setShowChildren(!showChildren);
+    if (hasChildren) setShowChildren(!showChildren);
     dispatch(setSelectedNodeId(id));
   }
 
@@ -29,8 +29,8 @@ const TreeNode = ({ id, name, children }: Tree) => {
       ? (
         <>
           <ActionButton variant={Actions.add} onClick={() => onActionButtonClick(Actions.add) } />
-          <ActionButton variant={Actions.edit} onClick={() => onActionButtonClick(Actions.edit) } />
-          <ActionButton variant={Actions.delete} onClick={() => onActionButtonClick(Actions.delete) } />
+          {!isRoot && <ActionButton variant={Actions.edit} onClick={() => onActionButtonClick(Actions.edit) } />}
+          {!isRoot && <ActionButton variant={Actions.delete} onClick={() => onActionButtonClick(Actions.delete) } />}
         </>
       )
       : <></>

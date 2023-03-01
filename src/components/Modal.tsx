@@ -1,9 +1,9 @@
-import { Modal as AntdModal, Form, Input } from 'antd';
+import { Modal as AntdModal, Form, Divider } from 'antd';
 import { Actions, TREE_GUID } from '../contants';
 import { useAppDispatch, useAppSelector } from '../store';
 import { selectModalParams, selectIsLoading, setModalParams } from '../store/slices';
-import { ModalParams } from '../types';
-
+import './Modal.css';
+import ModalForm from './ModalForm';
 
 const Modal = () => {
   const dispatch = useAppDispatch();
@@ -12,68 +12,69 @@ const Modal = () => {
   const [form] = Form.useForm();
   const shownNodeName = nodeName === TREE_GUID ? 'Root' : nodeName;
 
-  const handleOk = () => {}
-
   const handleCancel = () => {
-    console.log('Clicked cancel button');
     dispatch(setModalParams({ isOpened: false }))
   };
 
-  const renderModalForm = () => {
-    const clearErrors = () => {}
-    const handleErrors = () => {}
-    const onFinish = () => {}
-
-    const getPlaceholder = (mode: Actions) => {
-      switch (mode) {
-        case Actions.add:
-          return 'Node Name';
-        case Actions.edit:
-          return shownNodeName;
-        default:
-          return 'Add value';
-      }
-    }
-
-    return (
-      <Form
-        form={form}
-        onValuesChange={clearErrors}
-        onFinishFailed={handleErrors}
-        onFinish={onFinish}
-      >
-        <Form.Item
-          name='pin'
-          noStyle={true}
-          rules={[
-            { required: true, message: 'Value is required' },
-          ]}
-        >
-          <Input placeholder={getPlaceholder(mode as Actions)}/>
-        </Form.Item>
-      </Form>
-    );
-  }
-
-  const renderModalContent = () => {
+  const getPlaceholder = () => {
     switch (mode) {
       case Actions.add:
+        return 'Node Name';
       case Actions.edit:
-        return renderModalForm();
+        return shownNodeName;
+      default:
+        return 'Add value';
+    }
+  }
+
+  const onFinish = ({ updatedTreeNode }: any) => {
+    const data = {
+      treeNode: nodeName,
+      nodeName: updatedTreeNode,
+      // nodeId: i
+    };
+    console.log('on finsh data: ', data);
+  }
+
+  const getActionText = (): string => {
+    switch (mode) {
+      case Actions.add:
+        return 'Add';
+      case Actions.edit:
+        return 'Rename'
       case Actions.delete:
-        return <span>{`Do you want to delete ${shownNodeName}?`}</span>
+        return 'Delete'
+      default:
+        return ''
     }
   }
 
   return (
     <AntdModal
-      title="Title"
+      destroyOnClose
+      title={getActionText()}
       open={isOpened}
-      onOk={handleOk}
+      onOk={() => form.submit()}
       confirmLoading={isLoading}
       onCancel={handleCancel}
+      okButtonProps={{ danger: mode === Actions.delete }}
+      okType={mode === Actions.delete ? 'default' : 'primary'}
+      okText={getActionText().toUpperCase()}
+      cancelText='CANCEL'
       >
-        {renderModalContent()}
+        <>
+          <Divider />
+          {mode === Actions.delete
+            ? <span>{`Do you want to delete ${shownNodeName}?`}</span>
+            : <ModalForm
+                formInstance={form}
+                placeholder={getPlaceholder()}
+                label={mode === Actions.edit ? 'New Node Name' : ''}
+                onFinish={onFinish}
+              />
+          }
+          <Divider />
+        </>
     </AntdModal>
   );
 };
