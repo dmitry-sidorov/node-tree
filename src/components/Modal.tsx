@@ -2,7 +2,7 @@ import { Modal as AntdModal, Form, Divider } from 'antd';
 import { Actions, TREE_GUID } from '../contants';
 import { useAppDispatch, useAppSelector } from '../store';
 import { selectModalParams, selectIsLoading, setModalParams } from '../store/slices';
-import { addTreeNode, deleteTreeNode, editTreeNode, fetchRootTree, updateAndFetch } from '../store/thunks';
+import { addTreeNode, deleteTreeNode, editTreeNode, fetchRootTree } from '../store/thunks';
 import './Modal.css';
 import ModalForm from './ModalForm';
 
@@ -56,7 +56,7 @@ const Modal = () => {
     }
   }
 
-  const onModalOk = () => {
+  const onSubmit = () => {
     switch(mode) {
       case Actions.add:
       case Actions.edit:
@@ -67,11 +67,7 @@ const Modal = () => {
         break;
     }
 
-    // setTimeout(() => {
-      
-      onModalClose();
-      // dispatch(fetchRootTree());
-    // });
+    onModalClose();
   }
 
   return (
@@ -79,7 +75,7 @@ const Modal = () => {
       destroyOnClose
       title={getActionText()}
       open={isOpened}
-      onOk={onModalOk}
+      onOk={onSubmit}
       confirmLoading={isLoading}
       onCancel={onModalClose}
       okButtonProps={{ danger: mode === Actions.delete }}
@@ -96,6 +92,7 @@ const Modal = () => {
                 placeholder={getPlaceholder()}
                 label={mode === Actions.edit ? 'New Node Name' : ''}
                 onFinish={onFormFinish}
+                onPressEnter={onSubmit}
               />
           }
           <Divider />

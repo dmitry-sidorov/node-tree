@@ -8,7 +8,15 @@ const rootReducer = {
 };
 
 export const makeStore = () => {
-  return configureStore({ reducer: rootReducer });
+  return configureStore({
+    reducer: rootReducer,
+    middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActionPaths: ['payload'],
+      },
+    }),
+  });
 };
 
 const store = makeStore();

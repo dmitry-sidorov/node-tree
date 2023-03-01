@@ -1,9 +1,14 @@
-import { createAsyncThunk, PayloadAction, unwrapResult } from '@reduxjs/toolkit';
+import { createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import TreeApi from '../api'
 import { TREE_GUID } from '../contants';
 import { CreateNodeParams, DeleteNodeParams, RenameNodeParams, Tree } from '../types';
 import { PageState } from './slices';
 
+type ErrorPayload = {
+	error: {
+		message: string;
+	}
+};
 
 export const fetchRootTree = createAsyncThunk(
 	'fetchRootTree',
@@ -40,18 +45,13 @@ const createCommonPendingCase = (state: any) => {
   state.error = null;
 }
 
-export const updateAndFetch = (payload: any) => async (dispatch: any) => {
-  await dispatch(editTreeNode(payload))
-  return dispatch(fetchRootTree());
-}
-
 const createCommonExtraReducer = (builder: any, thunk: any) => {
 	builder.addCase(thunk.pending, (state: PageState) => createCommonPendingCase(state));
-	builder.addCase(thunk.fulfilled, (state: PageState, { payload }: PayloadAction<Tree>) => {
+	builder.addCase(thunk.fulfilled, (state: PageState) => {
 		state.isLoading = false;
 	});
-	builder.addCase(thunk.rejected, (state: PageState, { payload }: PayloadAction<Error>) => {
-		state.error = payload;
+	builder.addCase(thunk.rejected, (state: PageState, { error: { message }}: ErrorPayload) => {
+		state.error = message;
 		state.isLoading = false;
 	});
 }
@@ -63,8 +63,8 @@ const extraReducers = (builder: any) => {
     state.rootTree = payload;
     state.isLoading = false;
 	});
-  builder.addCase(fetchRootTree.rejected, (state: PageState, { payload }: PayloadAction<Error>) => {
-    state.error = payload;
+  builder.addCase(fetchRootTree.rejected, (state: PageState, { error: { message }}: ErrorPayload) => {
+    state.error = message;
     state.rootTree = null;
     state.isLoading = false;
 	});

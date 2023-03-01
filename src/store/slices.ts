@@ -6,8 +6,9 @@ import { ModalParams, Tree } from '../types';
 export type PageState = {
   selectedNodeId: number | null;
   rootTree: Tree | null;
+  expandedNodesIds: number[];
   modalParams: ModalParams;
-  error: Error | null;
+  error: string | null;
   isLoading: boolean;
 };
 
@@ -16,6 +17,7 @@ export const pageStateSlice = createSlice({
   initialState: {
     selectedNodeId: null,
     rootTree: null,
+    expandedNodesIds: [],
     error: null,
     isLoading: false,
     modalParams: { isOpened: false }
@@ -33,15 +35,34 @@ export const pageStateSlice = createSlice({
     setModalParams: (state: PageState, { payload: modalParams }: PayloadAction<ModalParams>) => {
       return { ...state, modalParams };
     },
+    addExpandedNodeId: (state: PageState, { payload: id }: PayloadAction<number>) => {
+      const expandedNodesIds = [...state.expandedNodesIds, id];
+  
+      return { ...state, expandedNodesIds };
+    },
+    removeExpandedNodeId: (state: PageState, { payload: id }: PayloadAction<number>) => {
+      const expandedNodesIds = state.expandedNodesIds.filter(expandedNodeId => expandedNodeId !== id);
+
+      return { ...state, expandedNodesIds };
+    },
   },
   extraReducers
 });
 
-export const { setSelectedNodeId, resetSelectedNodeId, setTreeNodes, setModalParams } = pageStateSlice.actions;
+export const {
+  setSelectedNodeId,
+  resetSelectedNodeId,
+  setTreeNodes,
+  setModalParams,
+  addExpandedNodeId,
+  removeExpandedNodeId
+} = pageStateSlice.actions;
 
 export const selectSelectedNodeId = ({ pageState: { selectedNodeId } }: AppState) => selectedNodeId;
-export const selectRootTree = ({ pageState: { rootTree } }: AppState): Tree | null => rootTree;
-export const selectModalParams = ({ pageState: { modalParams } }: AppState): ModalParams => modalParams;
-export const selectIsLoading = ({ pageState: { isLoading } }: AppState): boolean => isLoading;
+export const selectRootTree = ({ pageState: { rootTree } }: AppState): PageState['rootTree'] => rootTree;
+export const selectModalParams = ({ pageState: { modalParams } }: AppState): PageState['modalParams'] => modalParams;
+export const selectIsLoading = ({ pageState: { isLoading } }: AppState): PageState['isLoading'] => isLoading;
+export const selectExpandedNodesIds = ({ pageState: { expandedNodesIds } }: AppState): PageState['expandedNodesIds'] => expandedNodesIds;
+export const selectError = ({ pageState: { error } }: AppState): PageState['error'] => error;
 
 export default pageStateSlice.reducer;

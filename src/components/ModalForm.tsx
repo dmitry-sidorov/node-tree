@@ -9,9 +9,10 @@ type PropsType = {
   placeholder?: string;
   onFinish?: Function;
   formInstance: FormInstance;
+  onPressEnter?: Function;
 }
 
-const ModalForm = ({ label, placeholder, onFinish, formInstance }: PropsType) => {
+const ModalForm = ({ label, placeholder, onFinish, formInstance, onPressEnter }: PropsType) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleErrors = (value: any) => {
@@ -19,6 +20,13 @@ const ModalForm = ({ label, placeholder, onFinish, formInstance }: PropsType) =>
     const [errorMessage] = formInstance.getFieldError(FORM_NAME);
 
     setErrorMessage(errorMessage);
+  }
+
+  const onKeyDown = (event: any) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      onPressEnter?.(event);
+    }
   }
 
   return (
@@ -36,7 +44,7 @@ const ModalForm = ({ label, placeholder, onFinish, formInstance }: PropsType) =>
           { required: true, message: 'Value is required' },
         ]}
         >
-          <Input placeholder={placeholder} /> 
+          <Input placeholder={placeholder} onKeyDown={onKeyDown} /> 
       </Form.Item>
       {errorMessage && <span className='modal-form_error'>{errorMessage}</span>}
     </Form>

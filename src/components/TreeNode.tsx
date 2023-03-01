@@ -1,14 +1,22 @@
-import React, { useState, forwardRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import classNames from 'classnames';
 import { useAppDispatch, useAppSelector } from '../store';
-import { selectSelectedNodeId, setModalParams, setSelectedNodeId } from '../store/slices';
+import {
+  addExpandedNodeId,
+  removeExpandedNodeId,
+  selectExpandedNodesIds,
+  selectSelectedNodeId,
+  setModalParams,
+  setSelectedNodeId
+} from '../store/slices';
 import { ModalNodePayload, Tree } from '../types';
 import './TreeNode.css';
 import { ActionButton, ExpandButton } from '.';
 import { Actions, TREE_GUID } from '../contants';
 
 const TreeNode = ({ id, name, children }: Tree = { id: 1, name: 'default', children: [] }) => {
-  const [showChildren, setShowChildren] = useState<boolean>(false);
+  const expandedNodesIds =  useAppSelector(selectExpandedNodesIds);
+  const [showChildren, setShowChildren] = useState<boolean>(expandedNodesIds.includes(id));
   const selectedNodeId = useAppSelector(selectSelectedNodeId);
   const dispatch = useAppDispatch();
   const isSelected = selectedNodeId === id;
@@ -16,9 +24,20 @@ const TreeNode = ({ id, name, children }: Tree = { id: 1, name: 'default', child
   const isRoot = name === TREE_GUID;
 
   const onExpandClick = () => {
-    if (hasChildren) setShowChildren(!showChildren);
+    if (hasChildren) {
+      setShowChildren(!showChildren);
+    }
     dispatch(setSelectedNodeId(id));
   }
+
+  useEffect(() => {
+    if (showChildren) {
+      dispatch(addExpandedNodeId(id));
+    } else {
+      dispatch(removeExpandedNodeId(id));
+    }
+  // eslint-disable-next-line
+  }, [showChildren]);
 
   const getNodePayload = (mode: Actions): ModalNodePayload => {
     switch (mode) {
