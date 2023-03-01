@@ -1,8 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AppState } from '../store';
+import { Tree } from '../types';
 
 export type PageState = {
   selectedNodeId: number | null;
+  nodes: Tree[],
 };
 
 export const pageStateSlice = createSlice({

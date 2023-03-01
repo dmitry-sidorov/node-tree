@@ -1,13 +1,11 @@
-import { Button } from 'antd';
-import classNames from 'classnames';
 import React, { useState } from 'react';
-import { useAppDispatch, useAppSelector } from './store';
-import { selectSelectedNodeId, setSelectedNodeId } from './store/slices';
-import { Tree } from './types';
+import classNames from 'classnames';
+import { useAppDispatch, useAppSelector } from '../store';
+import { selectSelectedNodeId, setSelectedNodeId } from '../store/slices';
+import { Tree } from '../types';
 import './TreeNode.css';
-import ExpandButton from './ExpandButton';
-import ActionButton from './ActionButton';
-import { TREE_GUID } from './contants';
+import { ActionButton, ExpandButton } from '.';
+import { TREE_GUID } from '../contants';
 
 const TreeNode = ({ id, name, children }: Tree) => {
   const [showChildren, setShowChildren] = useState<boolean>(false);

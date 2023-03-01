@@ -1,7 +1,7 @@
 import React from 'react';
 import './Tree.css';
-import mockData from './mock-data.json';
-import TreeNode from './TreeNode';
+import mockData from '../mock-data.json';
+import { TreeNode } from '.';
 
 const Tree = (props: any) => {
   console.log('mock data: ', mockData);
