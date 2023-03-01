@@ -10,3 +10,5 @@ In the project directory, you can run:
 
 Runs the app in the development mode.\
 Open [http://localhost:7777](http://localhost:7777) to view it in the browser.
+
+Author: Dmitriy Sidorov
