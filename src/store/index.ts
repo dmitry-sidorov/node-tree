@@ -1,7 +1,11 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 
-import rootReducer from './slices';
+import pageStateSlice from './slices';
+
+const rootReducer = {
+  pageState: pageStateSlice,
+};
 
 export const makeStore = () => {
   return configureStore({ reducer: rootReducer });

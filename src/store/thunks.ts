@@ -1,4 +1,4 @@
-import { createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, PayloadAction, unwrapResult } from '@reduxjs/toolkit';
 import TreeApi from '../api'
 import { CreateNodeParams, DeleteNodeParams, RenameNodeParams, Tree } from '../types';
 import { PageState } from './slices';
@@ -7,7 +7,7 @@ import { PageState } from './slices';
 export const fetchRootTree = createAsyncThunk(
 	'fetchRootTree',
 	async (treeName: string) => {
-		return await TreeApi.getTree(treeName);
+		return await TreeApi.getTree(treeName).then(result => result?.data);
 	},
 );
 
@@ -53,12 +53,12 @@ const extraReducers = (builder: any) => {
 	// fetch tree
 	builder.addCase(fetchRootTree.pending, (state: PageState) => createCommonPendingCase(state));
   builder.addCase(fetchRootTree.fulfilled, (state: PageState, { payload }: PayloadAction<Tree>) => {
-    state.nodes = payload;
+    state.rootTree = payload;
     state.isLoading = false;
 	});
   builder.addCase(fetchRootTree.rejected, (state: PageState, { payload }: PayloadAction<Error>) => {
     state.error = payload;
-    state.nodes = null;
+    state.rootTree = null;
     state.isLoading = false;
 	});
 

@@ -3,11 +3,9 @@ import { AppState } from '../store';
 import extraReducers from './thunks';
 import { ModalParams, Tree } from '../types';
 
-export { fetchRootTree, addTreeNode, editTreeNode, deleteTreeNode } from './thunks';
-
 export type PageState = {
   selectedNodeId: number | null;
-  nodes: Tree | null;
+  rootTree: Tree | null;
   modal?: ModalParams;
   error: Error | null;
   isLoading: boolean;
@@ -15,7 +13,7 @@ export type PageState = {
 
 export const pageStateSlice = createSlice({
   name: 'pageState',
-  initialState: { selectedNodeId: null, nodes: null, error: null, isLoading: false } as PageState,
+  initialState: { selectedNodeId: null, rootTree: null, error: null, isLoading: false } as PageState,
   reducers: {
     setSelectedNodeId: (state: PageState, { payload: selectedNodeId }: PayloadAction<number>) => {
       return { ...state, selectedNodeId };
@@ -36,9 +34,6 @@ export const pageStateSlice = createSlice({
 export const { setSelectedNodeId, resetSelectedNodeId } = pageStateSlice.actions;
 
 export const selectSelectedNodeId = ({ pageState: { selectedNodeId } }: AppState) => selectedNodeId;
+export const selectRootTree = ({ pageState: { rootTree } }: AppState) => rootTree;
 
-const rootReducer = {
-  pageState: pageStateSlice.reducer,
-};
-
-export default rootReducer;
+export default pageStateSlice.reducer;
