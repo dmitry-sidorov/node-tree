@@ -1,11 +1,11 @@
 import React from 'react';
 import { PlusCircleOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import classNames from 'classnames';
 import './ActionButton.css';
+import { Actions } from '../contants';
 
 type PropsType = Omit<
   React.HTMLProps<HTMLButtonElement> & {
-    variant: 'add' | 'edit' | 'delete';
+    variant: Actions;
   },
   'type'
 >
@@ -13,11 +13,11 @@ type PropsType = Omit<
 const ActionButton = ({ variant, ...restProps }: PropsType) => {
   const renderIcon = () => {
     switch (variant) {
-      case 'add':
+      case Actions.add:
         return <PlusCircleOutlined />;
-      case 'edit':
+      case Actions.edit:
         return <EditOutlined />;
-      case 'delete':
+      case Actions.delete:
         return <DeleteOutlined />;
     }
   }

@@ -5,7 +5,7 @@ import { selectSelectedNodeId, setSelectedNodeId } from '../store/slices';
 import { Tree } from '../types';
 import './TreeNode.css';
 import { ActionButton, ExpandButton } from '.';
-import { TREE_GUID } from '../contants';
+import { Actions, TREE_GUID } from '../contants';
 
 const TreeNode = ({ id, name, children }: Tree) => {
   const [showChildren, setShowChildren] = useState<boolean>(false);
@@ -15,20 +15,22 @@ const TreeNode = ({ id, name, children }: Tree) => {
   const hasChildren = children.length > 0;
   const isRoot = name === TREE_GUID;
 
-  console.log('selectedNodeId: ', selectedNodeId);
-
   const onExpandClick = () => {
     setShowChildren(!showChildren);
     dispatch(setSelectedNodeId(id));
+  }
+
+  const onActionButtonClick = (variant: Actions) => {
+
   }
 
   const renderActionButtons = () => {
     return isSelected 
       ? (
         <>
-          <ActionButton variant='add' />
-          <ActionButton variant='edit' />
-          <ActionButton variant='delete' />
+          <ActionButton variant={Actions.add} onClick={() => onActionButtonClick(Actions.add) } />
+          <ActionButton variant={Actions.edit} onClick={() => onActionButtonClick(Actions.edit) } />
+          <ActionButton variant={Actions.delete} onClick={() => onActionButtonClick(Actions.delete) } />
         </>
       )
       : <></>

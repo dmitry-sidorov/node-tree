@@ -1,3 +1,5 @@
+import { Actions } from './contants';
+
 export type Tree = {
   id: number;
   name: string;
@@ -17,4 +19,12 @@ export type DeleteNodeParams = {
 
 export type RenameNodeParams = DeleteNodeParams & {
   newNodeName: string;
+}
+
+export type ModalParams = {
+  isOpened: boolean;
+  mode?: Actions;
+  treeName?: string;
+  nodeId?: number;
+  nodeName?: number;
 }
